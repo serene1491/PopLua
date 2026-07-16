@@ -1,0 +1,82 @@
+<Project>
+  <PropertyGroup>
+    <_PopLuaAnyApiGeneration Condition="'$(PopLuaGenerateApiManifest)' == 'true' or '$(PopLuaGenerateLuaLsDefinitions)' == 'true' or '$(PopLuaGenerateApiDocs)' == 'true'">true</_PopLuaAnyApiGeneration>
+    <PopLuaApiOutputDir Condition="'$(PopLuaApiOutputDir)' == ''">$(BaseIntermediateOutputPath)$(Configuration)/$(TargetFramework)/poplua-api</PopLuaApiOutputDir>
+    <EmitCompilerGeneratedFiles Condition="'$(_PopLuaAnyApiGeneration)' == 'true' and '$(EmitCompilerGeneratedFiles)' == ''">true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath Condition="'$(_PopLuaAnyApiGeneration)' == 'true' and '$(CompilerGeneratedFilesOutputPath)' == ''">$(BaseIntermediateOutputPath)$(Configuration)/$(TargetFramework)/generated</CompilerGeneratedFilesOutputPath>
+    <_PopLuaCompilerGeneratedFilesOutputPath>$([MSBuild]::EnsureTrailingSlash($(CompilerGeneratedFilesOutputPath)))</_PopLuaCompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
+  <UsingTask TaskName="PopLuaWriteGeneratedText"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <SourceFile ParameterType="System.String" Required="true" />
+      <PropertyName ParameterType="System.String" Required="true" />
+      <DestinationFile ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        if (!File.Exists(SourceFile))
+        {
+            Log.LogMessage(MessageImportance.Low, "PopLua provider source was not found: {0}", SourceFile);
+            return true;
+        }
+
+        var source = File.ReadAllText(SourceFile);
+        var pattern = "\\b" + Regex.Escape(PropertyName) + "\\s*=\\s*\"(?<value>(?:\\\\.|[^\"])*)\";";
+        var match = Regex.Match(source, pattern, RegexOptions.Singleline);
+        if (!match.Success)
+        {
+            Log.LogError("PopLua generated provider '{0}' did not contain string property '{1}'.", SourceFile, PropertyName);
+            return false;
+        }
+
+        var directory = Path.GetDirectoryName(DestinationFile);
+        if (!string.IsNullOrEmpty(directory))
+            Directory.CreateDirectory(directory);
+
+        var text = Regex.Unescape(match.Groups["value"].Value);
+        File.WriteAllText(DestinationFile, text, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        Log.LogMessage(MessageImportance.High, "PopLua wrote {0}", DestinationFile);
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="PopLuaPrepareGeneratedFilesOutput"
+          BeforeTargets="CoreCompile"
+          Condition="'$(_PopLuaAnyApiGeneration)' == 'true'">
+    <MakeDir Directories="$(CompilerGeneratedFilesOutputPath)" />
+  </Target>
+
+  <Target Name="PopLuaWriteApiOutputs"
+          AfterTargets="CoreCompile"
+          Condition="'$(PopLuaGenerateApiManifest)' == 'true' or '$(PopLuaGenerateLuaLsDefinitions)' == 'true' or '$(PopLuaGenerateApiDocs)' == 'true'">
+    <ItemGroup>
+      <_PopLuaManifestProvider Include="$(_PopLuaCompilerGeneratedFilesOutputPath)**/PopLuaApiManifest.g.cs" />
+      <_PopLuaLuaLsDefinitionProvider Include="$(_PopLuaCompilerGeneratedFilesOutputPath)**/PopLuaLuaLsDefinitions.g.cs" />
+      <_PopLuaApiDocsProvider Include="$(_PopLuaCompilerGeneratedFilesOutputPath)**/PopLuaApiDocs.g.cs" />
+    </ItemGroup>
+
+    <PopLuaWriteGeneratedText
+      Condition="'$(PopLuaGenerateApiManifest)' == 'true' and '@(_PopLuaManifestProvider)' != ''"
+      SourceFile="%(_PopLuaManifestProvider.Identity)"
+      PropertyName="Json"
+      DestinationFile="$(PopLuaApiOutputDir)/$(PopLuaApiManifestFile)" />
+
+    <PopLuaWriteGeneratedText
+      Condition="'$(PopLuaGenerateLuaLsDefinitions)' == 'true' and '@(_PopLuaLuaLsDefinitionProvider)' != ''"
+      SourceFile="%(_PopLuaLuaLsDefinitionProvider.Identity)"
+      PropertyName="Lua"
+      DestinationFile="$(PopLuaApiOutputDir)/$(PopLuaLuaLsDefinitionFile)" />
+
+    <PopLuaWriteGeneratedText
+      Condition="'$(PopLuaGenerateApiDocs)' == 'true' and '@(_PopLuaApiDocsProvider)' != ''"
+      SourceFile="%(_PopLuaApiDocsProvider.Identity)"
+      PropertyName="Markdown"
+      DestinationFile="$(PopLuaApiOutputDir)/$(PopLuaApiDocsFile)" />
+  </Target>
+</Project>

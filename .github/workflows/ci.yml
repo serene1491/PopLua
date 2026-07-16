@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  lua54:
+    runs-on: ubuntu-24.04
+    env:
+      POPLUA_LUA_VERSION: "5.4"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Install Lua 5.4
+        run: sudo apt-get update && sudo apt-get install --yes liblua5.4-dev
+      - run: dotnet restore PopLua.sln
+      - run: dotnet build PopLua.sln --no-restore --configuration Release
+      - run: dotnet test tests/PopLua.Tests/PopLua.Tests.csproj --no-build --configuration Release
+      - run: ./scripts/check.sh
+
+  lua55:
+    runs-on: ubuntu-24.04
+    container: archlinux:latest
+    env:
+      POPLUA_LUA_VERSION: "5.5"
+    steps:
+      - name: Install toolchain and Lua 5.5
+        run: pacman --sync --refresh --sysupgrade --noconfirm dotnet-sdk-10.0 git lua
+      - uses: actions/checkout@v4
+      - run: dotnet restore PopLua.sln
+      - run: dotnet build PopLua.sln --no-restore --configuration Release
+      - run: dotnet test tests/PopLua.Tests/PopLua.Tests.csproj --no-build --configuration Release

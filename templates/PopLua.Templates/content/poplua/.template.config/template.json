@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "serene1491",
+  "classifications": [ "PopLua", "Lua", "Console" ],
+  "identity": "PopLua.Templates.Minimal",
+  "name": "PopLua minimal console runner",
+  "shortName": "poplua",
+  "preferNameDirectory": true,
+  "sourceName": "PopLuaMinimal",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

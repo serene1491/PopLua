@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <defs>
+    <style>
+      .purple { fill: #68217a; }
+      .purple-stroke { stroke: #68217a; }
+      .moon { fill: #efe6ff; }
+      .text { fill: #68217a; font-family: Arial, Helvetica, sans-serif; font-weight: 800; }
+    </style>
+
+    <mask id="crescent-mask" maskUnits="userSpaceOnUse">
+      <rect width="512" height="512" fill="black"/>
+      <circle cx="192" cy="184" r="70" fill="white"/>
+      <circle cx="224" cy="158" r="74" fill="black"/>
+    </mask>
+  </defs>
+
+  <path
+    d="M 324 103 A 180 180 0 1 0 301 420"
+    fill="none"
+    class="purple-stroke"
+    stroke-width="7"
+    stroke-linecap="round"/>
+
+  <path
+    d="M 374 170 A 180 180 0 0 1 384 325"
+    fill="none"
+    class="purple-stroke"
+    stroke-width="7"
+    stroke-linecap="round"/>
+
+  <circle cx="224" cy="256" r="128" class="purple"/>
+
+  <circle cx="192" cy="184" r="70" class="moon" mask="url(#crescent-mask)"/>
+
+  <circle cx="360" cy="124" r="44" class="purple"/>
+
+  <text x="333" y="414" class="text" font-size="92" letter-spacing="-1">C#</text>
+</svg>

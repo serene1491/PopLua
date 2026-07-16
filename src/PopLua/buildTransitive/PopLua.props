@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <PopLuaGenerateApiManifest Condition="'$(PopLuaGenerateApiManifest)' == ''">true</PopLuaGenerateApiManifest>
+    <PopLuaGenerateLuaLsDefinitions Condition="'$(PopLuaGenerateLuaLsDefinitions)' == ''">true</PopLuaGenerateLuaLsDefinitions>
+    <PopLuaGenerateApiDocs Condition="'$(PopLuaGenerateApiDocs)' == ''">true</PopLuaGenerateApiDocs>
+    <PopLuaApiManifestFile Condition="'$(PopLuaApiManifestFile)' == ''">poplua.api.json</PopLuaApiManifestFile>
+    <PopLuaLuaLsDefinitionFile Condition="'$(PopLuaLuaLsDefinitionFile)' == ''">poplua.d.lua</PopLuaLuaLsDefinitionFile>
+    <PopLuaApiDocsFile Condition="'$(PopLuaApiDocsFile)' == ''">poplua-api.md</PopLuaApiDocsFile>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <CompilerVisibleProperty Include="PopLuaGenerateApiManifest" />
+    <CompilerVisibleProperty Include="PopLuaGenerateLuaLsDefinitions" />
+    <CompilerVisibleProperty Include="PopLuaGenerateApiDocs" />
+  </ItemGroup>
+</Project>

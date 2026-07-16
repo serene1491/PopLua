@@ -1,0 +1,11 @@
+# Binary
+bin/
+obj/
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+BenchmarkRun-*.log
+
+# IDE
+.vscode/
+.idea/
