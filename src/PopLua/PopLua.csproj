@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsAotCompatible>true</IsAotCompatible>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>true</WarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageId>PopLua</PackageId>
+    <Title>PopLua</Title>
+    <Version>1.0.0-rc.1</Version>
+    <PackageVersion>1.0.0-rc.1</PackageVersion>
+    <Authors>serene1491</Authors>
+    <Description>A Lua runtime for C# with source-generated bindings, AOT-friendly execution, and sandboxed scripts.</Description>
+    <PackageReadmeFile>PACKAGE_README.md</PackageReadmeFile>
+    <PackageIcon>poplua.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/serene1491/PopLua</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/serene1491/PopLua.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>lua;lua54;lua55;scripting;source-generator;aot;sandbox</PackageTags>
+    <PackageReleaseNotes>1.0 RC1 adds Lua 5.4/5.5 selection, and generated copy-based table returns. Native Lua packaging is not included.</PackageReleaseNotes>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../PopLua.Generators/PopLua.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="PopLua.Binding" />
+    <Using Include="PopLua.Context" />
+    <Using Include="PopLua.Diagnostics" />
+    <Using Include="PopLua.Exceptions" />
+    <Using Include="PopLua.Interop" />
+    <Using Include="PopLua.Interop.Native" />
+    <Using Include="PopLua.Marshaling" />
+    <Using Include="PopLua.Runtime" />
+    <Using Include="PopLua.Sandboxing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../PopLua.Generators/bin/$(Configuration)/netstandard2.0/PopLua.Generators.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs/"
+          Visible="false" />
+    <None Include="PACKAGE_README.md"
+          Pack="true"
+          PackagePath="/"
+          Visible="false" />
+    <None Include="../../poplua.png"
+          Pack="true"
+          PackagePath="/"
+          Visible="false" />
+    <None Include="buildTransitive/PopLua.props"
+          Pack="true"
+          PackagePath="buildTransitive/PopLua.props"
+          Visible="false" />
+    <None Include="buildTransitive/PopLua.targets"
+          Pack="true"
+          PackagePath="buildTransitive/PopLua.targets"
+          Visible="false" />
+  </ItemGroup>
+</Project>

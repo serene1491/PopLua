@@ -1,0 +1,17 @@
+<Project>
+  <Import Project="../src/PopLua/buildTransitive/PopLua.props" />
+
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="PopLua.Binding" />
+    <Using Include="PopLua.Context" />
+    <Using Include="PopLua.Diagnostics" />
+    <Using Include="PopLua.Exceptions" />
+    <Using Include="PopLua.Marshaling" />
+    <Using Include="PopLua.Runtime" />
+    <Using Include="PopLua.Sandboxing" />
+  </ItemGroup>
+</Project>
