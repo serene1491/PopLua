@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageId>PopLua.Templates</PackageId>
+    <Title>PopLua Templates</Title>
+    <Version>1.0.0-rc.1</Version>
+    <PackageVersion>1.0.0-rc.1</PackageVersion>
+    <Authors>serene1491</Authors>
+    <Description>dotnet new templates for PopLua script hosts and generated binding projects.</Description>
+    <PackageProjectUrl>https://github.com/serene1491/PopLua</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/serene1491/PopLua.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>poplua;lua;templates;scripting</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>poplua.png</PackageIcon>
+    <PackageReleaseNotes>RC1 templates target the namespace-organized PopLua 1.0 API.</PackageReleaseNotes>
+    <PackageType>Template</PackageType>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="content/**" Exclude="content/**/bin/**;content/**/obj/**" Pack="true" PackagePath="%(Identity)" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
+    <None Include="../../poplua.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>
